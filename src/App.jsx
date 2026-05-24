@@ -25,10 +25,10 @@ const subcategoryOrder = {
 }
 
 const serviceVisuals = [
-  { key: 'private', image: '/images/services/private-session.svg' },
-  { key: 'graduation', image: '/images/services/graduation.svg' },
-  { key: 'society', image: '/images/services/society.svg' },
-  { key: 'commercial', image: '/images/services/commercial.svg' },
+  { key: 'private', image: '/images/services/private-session.png' },
+  { key: 'graduation', image: '/images/services/graduation.png' },
+  { key: 'society', image: '/images/services/society.png' },
+  { key: 'commercial', image: '/images/services/commercial.png' },
 ]
 
 const subcategoryLabels = {
@@ -312,11 +312,6 @@ export default function App() {
 
   function handleCategoryChange(category) {
     setActiveCategory(category)
-
-    const portfolioSection = document.getElementById('portfolio')
-    if (portfolioSection) {
-      portfolioSection.scrollIntoView({ block: 'start' })
-    }
   }
 
   function closeSubcategory(key) {
@@ -335,6 +330,24 @@ export default function App() {
     document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en'
     document.title = language === 'zh' ? '漫游桑Z｜小Z拍了拍悉尼' : 'Manyousang Z | Sydney Photography'
   }, [language])
+
+
+  useEffect(() => {
+    const scrollToHashTarget = () => {
+      if (!window.location.hash) return
+      const target = document.getElementById(decodeURIComponent(window.location.hash.slice(1)))
+      if (!target) return
+
+      window.requestAnimationFrame(() => {
+        target.scrollIntoView({ block: 'start' })
+      })
+    }
+
+    scrollToHashTarget()
+    window.addEventListener('hashchange', scrollToHashTarget)
+
+    return () => window.removeEventListener('hashchange', scrollToHashTarget)
+  }, [])
 
 
   useEffect(() => {
@@ -569,7 +582,7 @@ export default function App() {
         <img className="decor decor-film-far" src="/images/decor/film-strip.svg" alt="" />
         <img className="decor decor-frame-bottom" src="/images/decor/viewfinder.svg" alt="" />
       </div>
-      <header className="sticky top-0 z-30 border-b border-black/5 bg-paper/90 backdrop-blur">
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-black/5 bg-paper/95 shadow-[0_12px_40px_rgba(23,23,23,0.045)] backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 lg:px-10">
           <a href="#top" className="brand-lockup flex items-baseline gap-3">
             <span className="brand-mark font-serif text-xl tracking-[0.12em]">{t.brand}</span>
@@ -617,7 +630,23 @@ export default function App() {
         ) : null}
       </header>
 
-      <main id="top">
+      <div className="portfolio-floating-switcher" aria-label="Portfolio quick switch">
+        <p className="portfolio-floating-label">Portfolio</p>
+        <div className="portfolio-floating-actions">
+          {portfolioCategories.map((category) => (
+            <button
+              key={category}
+              type="button"
+              onClick={() => handleCategoryChange(category)}
+              className={activeCategory === category ? 'is-active' : ''}
+            >
+              {t.portfolio.categories[category]}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <main id="top" className="pt-[73px]">
         <section className="section-reveal pb-20 lg:pb-28">
           <div className="relative h-52 overflow-hidden bg-mist sm:h-72 lg:h-[360px]">
             <div className="mx-auto h-full max-w-7xl sm:px-8 lg:px-10">
@@ -666,8 +695,8 @@ export default function App() {
         <section id="portfolio" className="section-reveal mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:px-10">
           <SectionHeading eyebrow={t.portfolio.eyebrow} title={t.portfolio.title} copy={t.portfolio.copy} />
 
-          <div className="mt-10 grid gap-8 lg:grid-cols-[240px_1fr]">
-            <aside className="self-start rounded-[1.75rem] border border-black/5 bg-white/55 p-3 lg:sticky lg:top-28">
+          <div className="portfolio-layout mt-10 grid gap-8 lg:grid-cols-[240px_1fr]">
+            <aside className="portfolio-sidebar self-start rounded-[1.75rem] border border-black/5 bg-white/55 p-3 lg:sticky lg:top-28">
               <div className="grid gap-2">
                 {portfolioCategories.map((category) => (
                   <button
@@ -725,14 +754,14 @@ export default function App() {
 
                   {openSubcategories.includes(group.key) ? (
                   <div className="px-5 pb-5">
-                    <div className="columns-1 gap-5 sm:columns-2 xl:columns-3">
+                    <div className="portfolio-grid grid grid-cols-2 gap-3 sm:gap-5 xl:grid-cols-3">
                       {group.works.map((work) => (
-                        <article key={work.src} className="portfolio-photo-reveal mb-5 break-inside-avoid">
-                          <div className="group relative overflow-hidden rounded-3xl bg-white">
+                        <article key={work.src} className="portfolio-photo-reveal">
+                          <div className="portfolio-photo-card group relative overflow-hidden rounded-3xl bg-white">
                             <img
                               src={work.src}
                               alt={language === 'zh' ? work.zhTitle : work.enTitle}
-                              className="w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                              className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
                               loading="lazy"
                             />
                             <span className="absolute bottom-3 right-3 rounded-full bg-paper/90 px-3 py-1.5 text-xs uppercase tracking-[0.18em] text-ink backdrop-blur">
@@ -762,15 +791,15 @@ export default function App() {
         <section id="services" className="section-reveal border-y border-black/5 bg-white/60">
           <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:px-10">
             <SectionHeading eyebrow={t.services.eyebrow} title={t.services.title} copy={t.services.copy} />
-            <div className="mt-12 grid gap-6">
+            <div className="services-grid mt-12 grid gap-6">
               {t.services.items.map(([title, description], index) => {
                 const visual = serviceVisuals[index]
                 return (
                   <article
                     key={title}
-                    className="group grid overflow-hidden rounded-[2rem] border border-black/5 bg-paper shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-soft lg:grid-cols-[0.72fr_1.28fr]"
+                    className="service-card group grid overflow-hidden rounded-[2rem] border border-black/5 bg-paper shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-soft"
                   >
-                    <div className="min-h-72 overflow-hidden bg-mist lg:min-h-full">
+                    <div className="service-visual overflow-hidden bg-mist">
                       <img
                         src={visual.image}
                         alt=""
@@ -778,7 +807,7 @@ export default function App() {
                         loading="lazy"
                       />
                     </div>
-                    <div className="flex min-h-72 flex-col justify-center p-6 sm:p-8 lg:p-10">
+                    <div className="service-copy flex flex-col justify-center p-5 sm:p-8 lg:p-10">
                       <p className="text-xs uppercase tracking-widerest text-taupe">
                         {String(index + 1).padStart(2, '0')}
                       </p>
