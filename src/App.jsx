@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { works } from './portfolioData'
 
 const portfolioCategories = ['private', 'society', 'commercial', 'city']
@@ -25,10 +25,11 @@ const subcategoryOrder = {
 }
 
 const serviceVisuals = [
-  { key: 'private', image: '/images/services/private-session.png' },
-  { key: 'graduation', image: '/images/services/graduation.png' },
-  { key: 'society', image: '/images/services/society.png' },
-  { key: 'commercial', image: '/images/services/commercial.png' },
+  { key: 'private', image: '/images/services/private-session.jpg' },
+  { key: 'graduation', image: '/images/services/graduation.jpg' },
+  { key: 'society', image: '/images/services/society.jpg' },
+  { key: 'commercial', image: '/images/services/commercial.jpg' },
+  { key: 'wedding', image: '/images/services/wedding.jpg' },
 ]
 
 const subcategoryLabels = {
@@ -100,14 +101,15 @@ const content = {
         ['私人约拍', '适合人像、海边、街拍、情侣、朋友与主题写真。拍摄不会只追求“出片”，而是把地点、穿搭、光线和人物状态放在一起考虑，让照片自然、有氛围，也有可以长期保留的质感。'],
         ['毕业照', '悉尼范围内的毕业照都可以拍，支持个人、朋友、情侣和家庭合影。画面会兼顾正式感和生活感，不把毕业照拍成僵硬模板，而是保留这段经历里真实的人和关系。'],
         ['社团/活动拍摄', '适合校园社团、聚会、workshop、晚间活动和线下活动记录。重点不只是拍到现场，而是捕捉氛围、互动、细节和关键瞬间，让活动之后仍然有完整、可传播的视觉回忆。'],
-        ['商拍合作', '适合品牌内容、企业形象、门店空间、服务场景、活动宣传和社交媒体素材。拍摄会从用途出发，保证画面统一、干净、可信赖，适合发布、展示和长期使用。'],
+        ['商拍合作', '适合品牌内容、企业形象、门店空间、服务场景、活动宣传和社交媒体素材。拍摄会从用途出发，保证画面统一、干净、可信赖，适合发布、展示和长期使用。商拍内容和价格会根据拍摄类型、使用场景、拍摄时长、出片数量、是否需要视频、是否涉及活动跟拍或多地点拍摄来定义，建议先私信沟通需求后再给出更准确的报价。'],
+        ['婚礼拍摄', '适合婚礼仪式、领证记录、婚礼当天跟拍、婚宴现场和情侣纪念影像。拍摄重点会放在情绪、关系、现场氛围和关键瞬间上，不只是记录流程，而是把当天真实发生的拥抱、眼神、家人朋友和细节完整留下。可根据婚礼规模、拍摄时长、地点和交付需求定制方案。'],
       ],
     },
     booking: {
       eyebrow: 'Booking Info',
       title: '约拍海报与标价图',
       copy: '毕业照与日常约拍的基础信息可以在这里快速查看。',
-      posters: ['悉尼毕业照约拍', '悉尼日常约拍'],
+      posters: ['悉尼日常约拍', '悉尼毕业照约拍'],
     },
     graduation: {
       eyebrow: 'Graduation Photography',
@@ -192,14 +194,15 @@ const content = {
         ['Private Sessions', 'Portraits, seaside sessions, street photos, couples, friends, and creative concepts for people who want to document their Sydney life with images that feel natural, refined, and personal.'],
         ['Graduation Photography', 'Graduation sessions across Sydney for solo portraits, friends, couples, and families. The approach balances ceremony with real connection, so the images feel polished without becoming stiff.'],
         ['Society / Event Shoots', 'Coverage for student societies, workshops, evening events, and offline gatherings, with attention to atmosphere, interaction, details, and the moments that make an event memorable.'],
-        ['Commercial Collaboration', 'Brand content, business profiles, spaces, services, event promotion, and social media assets planned around clarity, consistency, and long-term usability.'],
+        ['Commercial Collaboration', 'Brand content, business profiles, spaces, services, event promotion, and social media assets planned around clarity, consistency, and long-term usability. Commercial pricing is defined by the shoot type, usage, duration, number of deliverables, whether video is needed, and whether the project involves event coverage or multiple locations. A more accurate quote can be provided after the brief is confirmed.'],
+        ['Wedding Photography', 'For wedding ceremonies, registry moments, wedding-day coverage, receptions, and couple memories. The focus is emotion, relationships, atmosphere, and key moments — not just documenting the schedule, but preserving the people, details, and feeling of the day. Packages can be shaped around wedding scale, hours, location, and delivery needs.'],
       ],
     },
     booking: {
       eyebrow: 'Booking Info',
       title: 'Booking posters and pricing images',
       copy: 'Quick reference for graduation and everyday portrait booking information.',
-      posters: ['Sydney graduation booking', 'Sydney daily portrait booking'],
+      posters: ['Sydney daily portrait booking', 'Sydney graduation booking'],
     },
     graduation: {
       eyebrow: 'Graduation Photography',
@@ -261,6 +264,36 @@ const contactInfo = {
   xiaohongshu: '2826662526',
 }
 
+function formatServiceDescription(description, key, language) {
+  if (key === 'commercial') {
+    const marker = language === 'zh' ? '商拍内容和价格会' : 'Commercial pricing is defined'
+    const markerIndex = description.indexOf(marker)
+
+    return {
+      main: markerIndex >= 0 ? description.slice(0, markerIndex).trim() : description,
+      note:
+        language === 'zh'
+          ? '商拍内容与价格会根据拍摄类型、使用场景、拍摄时长、出片数量、是否需要视频、是否涉及活动跟拍或多地点拍摄来定义，建议先私信沟通需求后再报价。'
+          : 'Commercial pricing is quoted separately based on shoot type, usage, duration, deliverables, video needs, event coverage, and location count.',
+    }
+  }
+
+  if (key === 'wedding') {
+    const marker = language === 'zh' ? '可根据婚礼规模' : 'Packages can be shaped'
+    const markerIndex = description.indexOf(marker)
+
+    return {
+      main: markerIndex >= 0 ? description.slice(0, markerIndex).trim() : description,
+      note:
+        language === 'zh'
+          ? '婚礼拍摄会根据婚礼规模、拍摄时长、地点、仪式流程和交付需求给出专属报价，可以先简单聊一下当天安排。'
+          : 'Wedding coverage is quoted based on wedding scale, hours, location, schedule, and delivery needs. We can first talk through the day and shape a suitable quote.',
+    }
+  }
+
+  return { main: description, note: '' }
+}
+
 function SectionHeading({ eyebrow, title, copy }) {
   return (
     <div className="max-w-2xl">
@@ -276,6 +309,8 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState('private')
   const [openSubcategories, setOpenSubcategories] = useState([])
+  const portfolioAnchorTopRef = useRef(null)
+  const albumAnchorTopRef = useRef(null)
 
   const t = content[language]
 
@@ -310,20 +345,60 @@ export default function App() {
     setOpenSubcategories(groupedWorks[0] ? [groupedWorks[0].key] : [])
   }, [groupedWorks])
 
+  useLayoutEffect(() => {
+    const previousTop = portfolioAnchorTopRef.current
+    if (previousTop === null) return
+
+    const anchor = document.querySelector('.portfolio-sidebar') ?? document.getElementById('portfolio-controls')
+    if (!anchor) {
+      portfolioAnchorTopRef.current = null
+      return
+    }
+
+    const nextTop = anchor.getBoundingClientRect().top
+    window.scrollBy({ top: nextTop - previousTop, left: 0, behavior: 'auto' })
+    portfolioAnchorTopRef.current = null
+  }, [activeCategory])
+
+  useLayoutEffect(() => {
+    const anchorInfo = albumAnchorTopRef.current
+    if (!anchorInfo) return
+
+    const anchor = document.getElementById(anchorInfo.id)
+    if (!anchor) {
+      albumAnchorTopRef.current = null
+      return
+    }
+
+    const nextTop = anchor.getBoundingClientRect().top
+    window.scrollBy({ top: nextTop - anchorInfo.top, left: 0, behavior: 'auto' })
+    albumAnchorTopRef.current = null
+  }, [openSubcategories])
+
+  function handlePortfolioImageLoad(event) {
+    const image = event.currentTarget
+    const item = image.closest('.portfolio-photo-reveal')
+    if (!item) return
+
+    const orientation = image.naturalWidth > image.naturalHeight ? 'landscape' : 'portrait'
+    item.dataset.orientation = orientation
+  }
+
   function handleCategoryChange(category) {
+    if (category === activeCategory) return
+
+    const anchor = document.querySelector('.portfolio-sidebar') ?? document.getElementById('portfolio-controls')
+    portfolioAnchorTopRef.current = anchor?.getBoundingClientRect().top ?? null
     setActiveCategory(category)
   }
 
   function closeSubcategory(key) {
     const albumSection = document.getElementById(`album-${key}`)
+    albumAnchorTopRef.current = albumSection
+      ? { id: `album-${key}`, top: Math.min(Math.max(albumSection.getBoundingClientRect().top, 96), window.innerHeight * 0.32) }
+      : null
 
     setOpenSubcategories((current) => current.filter((item) => item !== key))
-
-    window.requestAnimationFrame(() => {
-      if (albumSection) {
-        albumSection.scrollIntoView({ block: 'start' })
-      }
-    })
   }
 
   useEffect(() => {
@@ -480,6 +555,29 @@ export default function App() {
   }, [language, menuOpen, activeCategory, openSubcategories])
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 767px)')
+    const cards = document.querySelectorAll('.portfolio-photo-reveal')
+
+    if (!mediaQuery.matches || !('IntersectionObserver' in window)) {
+      cards.forEach((card) => card.classList.remove('is-mobile-focus'))
+      return undefined
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle('is-mobile-focus', entry.isIntersecting)
+        })
+      },
+      { threshold: 0.62, rootMargin: '-18% 0px -22% 0px' },
+    )
+
+    cards.forEach((card) => observer.observe(card))
+
+    return () => observer.disconnect()
+  }, [activeCategory, openSubcategories])
+
+  useEffect(() => {
     document.documentElement.classList.remove('motion-ready')
     const observedElements = document.querySelectorAll(
       '.section-reveal, .album-reveal, .portfolio-photo-reveal',
@@ -630,22 +728,6 @@ export default function App() {
         ) : null}
       </header>
 
-      <div className="portfolio-floating-switcher" aria-label="Portfolio quick switch">
-        <p className="portfolio-floating-label">Portfolio</p>
-        <div className="portfolio-floating-actions">
-          {portfolioCategories.map((category) => (
-            <button
-              key={category}
-              type="button"
-              onClick={() => handleCategoryChange(category)}
-              className={activeCategory === category ? 'is-active' : ''}
-            >
-              {t.portfolio.categories[category]}
-            </button>
-          ))}
-        </div>
-      </div>
-
       <main id="top" className="pt-[73px]">
         <section className="section-reveal pb-20 lg:pb-28">
           <div className="relative h-52 overflow-hidden bg-mist sm:h-72 lg:h-[360px]">
@@ -695,7 +777,7 @@ export default function App() {
         <section id="portfolio" className="section-reveal mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:px-10">
           <SectionHeading eyebrow={t.portfolio.eyebrow} title={t.portfolio.title} copy={t.portfolio.copy} />
 
-          <div className="portfolio-layout mt-10 grid gap-8 lg:grid-cols-[240px_1fr]">
+          <div id="portfolio-controls" className="portfolio-layout mt-10 grid gap-8 lg:grid-cols-[240px_1fr]">
             <aside className="portfolio-sidebar self-start rounded-[1.75rem] border border-black/5 bg-white/55 p-3 lg:sticky lg:top-28">
               <div className="grid gap-2">
                 {portfolioCategories.map((category) => (
@@ -725,10 +807,17 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => {
+                      const albumSection = document.getElementById(`album-${group.key}`)
+                      const albumHeader = albumSection?.querySelector('button')
+                      albumAnchorTopRef.current = albumSection
+                        ? {
+                            id: `album-${group.key}`,
+                            top: albumHeader?.getBoundingClientRect().top ?? albumSection.getBoundingClientRect().top,
+                          }
+                        : null
+
                       setOpenSubcategories((current) =>
-                        current.includes(group.key)
-                          ? current.filter((key) => key !== group.key)
-                          : [...current, group.key],
+                        current.includes(group.key) ? [] : [group.key],
                       )
                     }}
                     className="flex w-full items-center justify-between gap-4 p-5 text-left"
@@ -761,8 +850,10 @@ export default function App() {
                             <img
                               src={work.src}
                               alt={language === 'zh' ? work.zhTitle : work.enTitle}
-                              className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                              className="w-full object-contain transition duration-500 group-hover:scale-[1.03]"
+                              onLoad={handlePortfolioImageLoad}
                               loading="lazy"
+                              decoding="async"
                             />
                             <span className="absolute bottom-3 right-3 rounded-full bg-paper/90 px-3 py-1.5 text-xs uppercase tracking-[0.18em] text-ink backdrop-blur">
                               {t.portfolio.categories[work.category]}
@@ -794,6 +885,7 @@ export default function App() {
             <div className="services-grid mt-12 grid gap-6">
               {t.services.items.map(([title, description], index) => {
                 const visual = serviceVisuals[index]
+                const serviceText = formatServiceDescription(description, visual.key, language)
                 return (
                   <article
                     key={title}
@@ -803,8 +895,9 @@ export default function App() {
                       <img
                         src={visual.image}
                         alt=""
-                        className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+                        className="h-auto max-h-full w-full max-w-full object-contain transition duration-500 group-hover:scale-[1.03]"
                         loading="lazy"
+                        decoding="async"
                       />
                     </div>
                     <div className="service-copy flex flex-col justify-center p-5 sm:p-8 lg:p-10">
@@ -813,8 +906,13 @@ export default function App() {
                       </p>
                       <h3 className="mt-5 font-serif text-3xl leading-tight sm:text-4xl">{title}</h3>
                       <p className="mt-5 max-w-3xl text-sm leading-8 text-zinc-600 sm:text-base">
-                        {description}
+                        {serviceText.main}
                       </p>
+                      {serviceText.note ? (
+                        <p className="mt-4 max-w-2xl rounded-2xl border border-black/5 bg-white/60 px-4 py-3 text-xs leading-6 text-zinc-600 sm:text-sm">
+                          {serviceText.note}
+                        </p>
+                      ) : null}
                     </div>
                   </article>
                 )
@@ -826,9 +924,9 @@ export default function App() {
         <section id="booking" className="section-reveal mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:px-10">
           <SectionHeading eyebrow={t.booking.eyebrow} title={t.booking.title} copy={t.booking.copy} />
           <div className="mt-10 grid items-stretch gap-5 md:grid-cols-2">
-            {[
-              ['/images/posters/graduation-poster.webp', t.booking.posters[0]],
-              ['/images/posters/daily-poster.webp', t.booking.posters[1]],
+            {[ 
+              ['/images/posters/daily-poster.webp', t.booking.posters[0]],
+              ['/images/posters/graduation-poster.webp', t.booking.posters[1]],
             ].map(([src, title]) => (
               <article
                 key={src}
