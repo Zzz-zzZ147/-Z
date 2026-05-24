@@ -1,0 +1,7 @@
+<svg width="900" height="1100" viewBox="0 0 900 1100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="1100" fill="#DDD4C8"/>
+  <rect x="110" y="120" width="680" height="860" rx="40" fill="#F6F2EC"/>
+  <rect x="194" y="202" width="260" height="520" rx="130" fill="#85786D"/>
+  <circle cx="618" cy="416" r="156" fill="#B7A490"/>
+  <text x="150" y="930" fill="#5E554D" font-family="Arial, sans-serif" font-size="28" letter-spacing="8">GRADUATION STORY</text>
+</svg>

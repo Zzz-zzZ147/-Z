@@ -1,0 +1,7 @@
+<svg width="900" height="1100" viewBox="0 0 900 1100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="1100" fill="#201D1A"/>
+  <circle cx="244" cy="252" r="168" fill="#F0E8DC" fill-opacity="0.88"/>
+  <circle cx="614" cy="410" r="244" fill="#9A846F" fill-opacity="0.72"/>
+  <path d="M0 876C162 790 321 758 473 780C625 802 760 869 900 981V1100H0V876Z" fill="#F3EDE4"/>
+  <text x="86" y="1034" fill="#5E554D" font-family="Arial, sans-serif" font-size="28" letter-spacing="8">EVENING RECEPTION</text>
+</svg>

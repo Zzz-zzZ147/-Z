@@ -1,0 +1,8 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="900" fill="#DDD4C8"/>
+  <rect x="78" y="72" width="1044" height="756" rx="42" fill="#F6F2EC"/>
+  <rect x="154" y="152" width="390" height="540" rx="34" fill="#26221E"/>
+  <rect x="592" y="152" width="376" height="254" rx="34" fill="#A99886"/>
+  <rect x="592" y="438" width="376" height="254" rx="34" fill="#C9BCAA"/>
+  <text x="154" y="754" fill="#5E554D" font-family="Arial, sans-serif" font-size="28" letter-spacing="8">COMMERCIAL PLACEHOLDER</text>
+</svg>

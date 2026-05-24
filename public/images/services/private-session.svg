@@ -1,0 +1,8 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="900" fill="#EEE7DC"/>
+  <circle cx="340" cy="290" r="190" fill="#D4BFA9"/>
+  <rect x="130" y="515" width="940" height="210" rx="105" fill="#F8F3EA"/>
+  <rect x="520" y="180" width="390" height="560" rx="195" fill="#2B2722"/>
+  <path d="M130 724C360 612 650 596 1070 690V900H130V724Z" fill="#B69F88" fill-opacity=".45"/>
+  <text x="92" y="110" fill="#74675B" font-family="Arial, sans-serif" font-size="32" letter-spacing="8">PRIVATE SESSION</text>
+</svg>

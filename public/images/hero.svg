@@ -1,0 +1,15 @@
+<svg width="1200" height="1500" viewBox="0 0 1200 1500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="1500" fill="#D8D0C5"/>
+  <rect x="84" y="76" width="1032" height="1348" rx="52" fill="url(#paint0_linear)"/>
+  <circle cx="856" cy="430" r="258" fill="#F4EFE8" fill-opacity="0.72"/>
+  <rect x="178" y="282" width="318" height="678" rx="159" fill="#24211F" fill-opacity="0.9"/>
+  <rect x="564" y="624" width="382" height="472" rx="191" fill="#7D7268" fill-opacity="0.82"/>
+  <path d="M174 1186C357 1061 568 1001 1014 1088V1292H174V1186Z" fill="#F7F3EC" fill-opacity="0.85"/>
+  <text x="170" y="1230" fill="#1C1A18" font-family="Arial, sans-serif" font-size="34" letter-spacing="10">HERO PLACEHOLDER</text>
+  <defs>
+    <linearGradient id="paint0_linear" x1="180" y1="120" x2="1098" y2="1370" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F4EFE8"/>
+      <stop offset="1" stop-color="#A99B8B"/>
+    </linearGradient>
+  </defs>
+</svg>
