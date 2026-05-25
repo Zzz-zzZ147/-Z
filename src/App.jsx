@@ -341,6 +341,29 @@ export default function App() {
     })
   }, [activeCategory])
 
+  useLayoutEffect(() => {
+    const canControlScrollRestoration = 'scrollRestoration' in window.history
+    const previousScrollRestoration = canControlScrollRestoration
+      ? window.history.scrollRestoration
+      : null
+
+    if (canControlScrollRestoration) {
+      window.history.scrollRestoration = 'manual'
+    }
+
+    if (window.location.hash) {
+      window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`)
+    }
+
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+
+    return () => {
+      if (canControlScrollRestoration && previousScrollRestoration) {
+        window.history.scrollRestoration = previousScrollRestoration
+      }
+    }
+  }, [])
+
   useEffect(() => {
     setOpenSubcategories(groupedWorks[0] ? [groupedWorks[0].key] : [])
   }, [groupedWorks])
@@ -418,7 +441,6 @@ export default function App() {
       })
     }
 
-    scrollToHashTarget()
     window.addEventListener('hashchange', scrollToHashTarget)
 
     return () => window.removeEventListener('hashchange', scrollToHashTarget)
