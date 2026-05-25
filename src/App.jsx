@@ -954,11 +954,11 @@ export default function App() {
                 key={src}
                 className="flex h-full flex-col overflow-hidden rounded-[2rem] border border-black/5 bg-white shadow-soft"
               >
-                <div className="grid aspect-[4/5] place-items-center bg-[#dcebfa]">
+                <div className="booking-poster-frame grid aspect-[4/5] place-items-center bg-[#dcebfa]">
                   <img
                     src={src}
                     alt={title}
-                    className="h-full w-full object-contain"
+                    className="booking-poster-image h-full w-full object-contain"
                     loading="lazy"
                   />
                 </div>
