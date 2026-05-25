@@ -572,6 +572,10 @@ main img {
   break-inside: avoid;
 }
 
+.portfolio-photo-featured {
+  column-span: all;
+}
+
 .portfolio-photo-card {
   box-shadow: 0 18px 48px rgba(17, 17, 17, 0.07);
   background: rgba(255, 255, 255, 0.76);
@@ -646,6 +650,11 @@ main img {
     display: block;
     width: 100%;
     margin: 0 0 1.25rem;
+  }
+
+  .portfolio-photo-featured .portfolio-photo-card {
+    width: min(100%, 62rem);
+    margin-inline: auto;
   }
 }
 
@@ -759,6 +768,11 @@ main img {
 
   .portfolio-photo-reveal[data-orientation='landscape'] .portfolio-photo-card {
     width: min(88vw, 25rem);
+  }
+
+  .portfolio-photo-featured .portfolio-photo-card,
+  .portfolio-photo-featured[data-orientation='landscape'] .portfolio-photo-card {
+    width: min(94vw, 32rem);
   }
 
   .portfolio-photo-card img {

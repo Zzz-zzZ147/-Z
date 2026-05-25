@@ -867,7 +867,10 @@ export default function App() {
                   <div className="px-5 pb-5">
                     <div className="portfolio-grid grid grid-cols-2 gap-3 sm:gap-5 xl:grid-cols-3">
                       {group.works.map((work) => (
-                        <article key={work.src} className="portfolio-photo-reveal">
+                        <article
+                          key={work.src}
+                          className={`portfolio-photo-reveal${work.featured ? ' portfolio-photo-featured' : ''}`}
+                        >
                           <div className="portfolio-photo-card group relative overflow-hidden rounded-3xl bg-white">
                             <img
                               src={work.src}
