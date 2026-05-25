@@ -244,15 +244,6 @@ export const works = [
     enTitle: 'Graduation session',
   },
   {
-    src: '/images/portfolio/private-035.webp',
-    category: 'private',
-    subcategoryKey: '26-5-9-中国花园-花开富贵-汉服',
-    subcategoryZh: '26 5 9 中国花园 花开富贵 汉服',
-    subcategoryEn: 'Chinese Garden Hanfu',
-    zhTitle: '私人约拍作品',
-    enTitle: 'Private session',
-  },
-  {
     src: '/images/portfolio/private-036.webp',
     category: 'private',
     subcategoryKey: '26-5-9-中国花园-花开富贵-汉服',
