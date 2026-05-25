@@ -415,15 +415,6 @@ export const works = [
     enTitle: 'Society event coverage',
   },
   {
-    src: '/images/portfolio/society-009.webp',
-    category: 'society',
-    subcategoryKey: '26-3-7-penta-手工',
-    subcategoryZh: '26 3 7 penta 手工',
-    subcategoryEn: 'PENTA workshop',
-    zhTitle: '社团活动记录',
-    enTitle: 'Society event coverage',
-  },
-  {
     src: '/images/portfolio/society-010.webp',
     category: 'society',
     subcategoryKey: '26-3-7-penta-手工',
